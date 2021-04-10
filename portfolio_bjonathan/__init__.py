@@ -8,7 +8,7 @@ from settings import DB_PASSWORD
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = '00d879eda20abefccf3332e0b4e9e2e255e03f188761854c'
+app.config['SECRET_KEY'] = 'my_secret'  #Use a real key in production
 
 #############################
 ### DATABASE SETUP ##########
