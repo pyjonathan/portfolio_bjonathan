@@ -1,0 +1,42 @@
+.brand-image {
+    width: 30px;
+    height: 30px;
+    opacity: 0.5;
+}
+
+nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    background-color: #66ed2d;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  color: #ffffff;
+  background-color: #c76308;
+}
+
+.nav-pills > li > a {
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}
+
+.navbar-default {
+  background-color: #202945;
+  border-color: #e7e7e7;
+}
+
+#nav_title{
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 2em;
+  margin-right: 30px;
+}
+
+
+
+
+
+

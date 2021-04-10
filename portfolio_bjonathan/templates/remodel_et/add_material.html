@@ -1,0 +1,44 @@
+{% extends "remodel_et_base.html" %}
+{% block programs_title_bar %}Remodel Expense Tracker | Add Material{% endblock %}
+{% block content %}
+
+<div class="container">
+
+    {% for field in form.errors %}
+    {% for error in form.errors[field] %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <strong>Error: Most likely, you have entered an invalid decimal value.</strong>
+    </div>
+    {% endfor %}
+    {% endfor %}
+    
+    <h1>Add Material</h1>
+
+    <div class="container">
+        <form class="form-horizontal" action="" method="POST">
+            <div class="form-group">
+                {{ form.item_name.label }}
+                {{ form.item_name(class="form-control", style="width:400px") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.quantity.label }}
+                {{ form.quantity(class="form-control", style="width:400px") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.cost.label }}
+                {{ form.cost(class="form-control", style="width:400px") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class_="btn btn-primary") }}
+            </div>
+            {{ form.csrf_token() }}
+        </form>
+    </div>
+
+</div>
+{% endblock %}

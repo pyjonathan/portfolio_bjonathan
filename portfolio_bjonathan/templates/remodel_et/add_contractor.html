@@ -1,0 +1,43 @@
+{% extends "remodel_et_base.html" %}
+{% block programs_title_bar %}Remodel Expense Tracker | Add Contractor{% endblock %}
+{% block content %}
+<div class="container">
+
+    {% for field in form.errors %}
+    {% for error in form.errors[field] %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            <strong>Error:  Most likely, you have entered an invalid decimal value.</strong>
+        </div>
+    {% endfor %}
+    {% endfor %}
+    
+    <h1>Add Contractor</h1>
+
+    <div class="container">
+        <form action="" method="POST">
+            <div class="form-group">
+                {{ form.first_name.label }}
+                {{ form.first_name(class="form-control", style="width:400px") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.last_name.label }}
+                {{ form.last_name(class="form-control", style="width:400px") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.rate.label }}
+                {{ form.rate(class="form-control", style="width:400px") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class_="btn btn-primary") }}
+            </div>
+            {{ form.csrf_token() }}
+        </form>
+    </div>
+
+</div>
+{% endblock %}

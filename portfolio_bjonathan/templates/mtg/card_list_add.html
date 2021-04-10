@@ -1,0 +1,192 @@
+{% extends "mtg_base.html" %}
+{% block programs_title_bar %}MTG | Add Cards{% endblock %}
+
+{% block styles %}
+th {
+    z-index: 1;
+    background-color: #def5ff;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 90px;
+    box-shadow: 2px 4px gray;
+}
+{% endblock %}
+
+{% block fixed %}
+navbar-fixed-top
+{% endblock %}
+
+{% block content %}
+
+<div class="container" style="margin-top: 55px">
+
+    <div class="row">
+        <div class="col-md-6">
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by Card Name..">
+        </div>
+        <div class="col-md-6">
+            <input type="text" id="myInput2" onkeyup="myFunction2()"
+                placeholder="Search By Rarity M, R, C, U, L, T, S, or P..">
+        </div>
+    </div>
+
+    <form class="form-horizontal" action="" method="POST">
+        {{ form.submit(class="btn btn-success stay", style="width:100%") }}
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover table-striped" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="" id="expand-button">
+                                    <button class="btn btn-primary btn-xs" onclick="expandAll()" type="button">Expand
+                                        All</button>
+                                </div>
+                                <div class="hide-button" id="close-button">
+                                    <button class="btn btn-primary btn-xs" onclick="close_all()" type="button">Close
+                                        All</button>
+                                </div>
+                            </th>
+                            <th>Image</th>
+                            <th>Rarity</th>
+                            <th>Card Name</th>
+                            <th>Qty. Regular</th>
+                            <th>Qty. Foil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for card in card_list_attributes %}
+                        <tr>
+                            <td><span class="glyphicon glyphicon-triangle-right"
+                                    onclick="expandImage({{ card[3]}})"></span></td>
+                            <td>
+                                <div class="card-image card-image-hidden" id="{{ card[3] }}">
+                                    <img src="{{ card[2] }}" />
+                                </div>
+                            </td>
+                            <td>{{ card[0] }}</td>
+                            <td>{{ card[1] }}</td>
+                            <td>
+                                {{ form.product_id(value=card[3]) }}
+                                {{ form.quantity_regular(class="form-control", style="width:50px;float:left;",
+                                value="0", id="quantityRegularNumberBox" + card[3], readonly = "readonly") }}
+                                <button class="btn btn-primary btn-sm qty-button" onclick="addOneRegular({{card[3]}})"
+                                    type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                                <button class="btn btn-primary btn-sm qty-button"
+                                    onclick="subtractOneRegular({{card[3]}})" type="button"><span
+                                        class="glyphicon glyphicon-minus"></span></button>
+                            </td>
+                            <td>
+                                {{ form.quantity_foil(class="form-control", style="width:50px;float:left", value="0",
+                                id="quantityFoilNumberBox" + card[3], readonly = "readonly") }}
+                                <button class="btn btn-primary btn-sm qty-button" onclick="addOneFoil({{card[3]}})"
+                                    type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                                <button class="btn btn-primary btn-sm qty-button" onclick="subtractOneFoil({{card[3]}})"
+                                    type="button"><span class="glyphicon glyphicon-minus"></span></button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    {{ form.csrf_token() }}
+</div>
+
+<br />
+<br />
+<br />
+
+<script>
+    function addOneRegular(productId) {
+        document.getElementById('quantityRegularNumberBox' + productId).value++;
+    }
+
+    function addOneFoil(productId) {
+        document.getElementById('quantityFoilNumberBox' + productId).value++;
+    }
+
+    function subtractOneRegular(productId) {
+        if (document.getElementById('quantityRegularNumberBox' + productId).value != '0') {
+            document.getElementById('quantityRegularNumberBox' + productId).value--;
+        }
+    }
+
+    function subtractOneFoil(productId) {
+        if (document.getElementById('quantityFoilNumberBox' + productId).value != '0') {
+            document.getElementById('quantityFoilNumberBox' + productId).value--;
+        }
+    }
+
+    function expandImage(productId) {
+        var imageId = document.getElementById(productId);
+        imageId.classList.toggle('card-image-hidden')
+    }
+
+    function expandAll() {
+        var images = document.querySelectorAll('.card-image');
+        console.log(images)
+        for (var i = 0; i < images.length; i++) {
+            images[i].classList.toggle('card-image-hidden');
+        }
+        document.getElementById('expand-button').classList.toggle('hide-button');
+        document.getElementById('close-button').classList.toggle('hide-button');
+    }
+
+    function close_all() {
+        var images = document.querySelectorAll('.card-image');
+        console.log(images)
+        for (var i = 0; i < images.length; i++) {
+            images[i].classList.toggle('card-image-hidden');
+        }
+        document.getElementById('expand-button').classList.toggle('hide-button');
+        document.getElementById('close-button').classList.toggle('hide-button');
+    }
+
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function myFunction2() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+</script>
+
+{% endblock %}

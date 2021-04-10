@@ -1,0 +1,129 @@
+{% extends "remodel_et_base.html" %}
+{% block programs_title_bar %}Remodel Expense Tracker | Overview{% endblock %}
+{% block content %}
+
+<div class="container choices">
+    <h2>Cost Overview</h2>
+
+    <table class="table table-hover table-condensed">
+        <tr>
+            <th>Item</th>
+            <th>Total Cost</th>
+        </tr>
+        <tr>
+            <td>Building Materials</td>
+            <td>{{ total_materials_cost_dollars }}</td>
+        </tr>
+        <tr>
+            <td>Labor</td>
+            <td>{{ total_labor_cost_dollars }}</td>
+        </tr>
+        <tr>
+            <td><strong>Total:</strong></td>
+            <td>{{ overall_cost_dollars }}</td>
+        </tr>
+    </table>
+</div>
+
+<!--
+contractor_info Indexes
+0 - id
+1 - first_name
+2 - last_name
+3 - rate
+4 - hours_worked
+5 - total_comp
+-->
+
+<div class="container choices">
+    <a class="btn btn-success contractor-buttons" style="float: right;" href="{{url_for('remodel_et.add_hours')}}" role="button">Add Hours</a>
+    <a class="btn btn-danger contractor-buttons" style="float: right;" href="{{url_for('remodel_et.delete_contractor')}}" role="button">Delete Contractor</a>
+    <a class="btn btn-warning contractor-buttons" style="float: right;" href="{{url_for('remodel_et.change_rate')}}" role="button">Change Rate</a>
+    <a class="btn btn-info contractor-buttons" style="float: right;" href="{{url_for('remodel_et.add_contractor')}}" role="button">Add Contractor</a>
+    <h2>Labor Cost</h2>
+    <table class="table table-hover table-condensed">
+        <tr>
+            <th>ID</th>
+            <th>Contractor</th>
+            <th>Rate</th>
+            <th>Total Hours</th>
+            <th>Total Compensation</th>
+        </tr>
+        {% for contractor in contractor_info %}
+        <tr>
+            <td>{{ contractor[0] }}</td>
+            <td>{{ contractor[1] }} {{ contractor[2] }}</td>
+            <td>{{ contractor[3] }}</td>
+            <td>{{ contractor[4] }}</td>
+            <td>{{ contractor[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!--
+material_info Indexes
+0 - id
+1 - item_name
+2 - quantity
+3 - cost
+4 - total_cost
+-->
+
+<div class="container choices">
+    <a class="btn btn-success contractor-buttons" style="float: right;" href="{{url_for('remodel_et.change_quantity')}}" role="button">Change Quantity</a>
+    <a class="btn btn-danger contractor-buttons" style="float: right;" href="{{url_for('remodel_et.delete_material')}}" role="button">Delete Material</a>
+    <a class="btn btn-warning contractor-buttons" style="float: right;" href="{{url_for('remodel_et.change_cost')}}" role="button">Change Cost</a>
+    <a class="btn btn-info contractor-buttons" style="float: right;" href="{{url_for('remodel_et.add_material')}}" role="button">Add Material</a>
+    <h2>Materials Cost</h2>
+    <div class="row">
+    <div class="col-md-6">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Material...">
+    </div>
+    </div>
+    <table class="table table-hover table-condensed" id="myTable">
+        <tr>
+            <th>ID</th>
+            <th>Item Name</th>
+            <th>Qty.</th>
+            <th>Cost</th>
+            <th>Total Cost</th>
+        </tr>
+        {% for material in material_info %}
+        <tr>
+            <td>{{ material[0] }}</td>
+            <td>{{ material[1] }}</td>
+            <td>{{ material[2] }}</td>
+            <td>{{ material[3] }}</td>
+            <td>{{ material[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script>
+        function myFunction() {
+                // Declare variables
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("myTable");
+                tr = table.getElementsByTagName("tr");
+
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[1];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+</script>
+
+
+{% endblock %}

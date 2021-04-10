@@ -1,0 +1,41 @@
+{% extends "remodel_et_base.html" %}
+{% block programs_title_bar %}Remodel Expense Tracker | Add Hours{% endblock %}
+{% block content %}
+<div class="container">
+
+    {% for field in form.errors %}
+    {% for error in form.errors[field] %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <strong>Error: Most likely, you have entered an invalid decimal value.</strong>
+    </div>
+    {% endfor %}
+    {% endfor %}
+    
+    <h1>Add Hours</h1>
+
+    <div class="container">
+        <form class="form-horizontal" action="" method="POST">
+            <div class="form-group">
+                {{ form.contractors.label }} <br />
+                {{ form.contractors(class="js-example-basic-single form-control", style="width:400px") }}
+            </div>
+            <div class="form-group">
+                {{ form.additional_hours.label }}
+                {{ form.additional_hours(class="form-control", style="width:400px") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class_="btn btn-primary") }}
+            </div>
+            {{ form.csrf_token() }}
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.js-example-basic-single').select2()
+    });
+</script>
+{% endblock %}

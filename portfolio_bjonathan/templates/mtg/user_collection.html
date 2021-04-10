@@ -1,0 +1,269 @@
+{% extends "mtg_base.html" %}
+{% block programs_title_bar %}MTG | {{ user.upper() }}'s Collection{% endblock %}
+
+
+{% block styles %}
+th {
+text-align: center;
+}
+
+td {
+text-align: center;
+}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="container">
+
+        <form class="form-inline" action="" method="POST">
+            <div class="form-group">
+                <label for="remove-cards">View a different set: </label>
+            </div>
+            <div class="form-group">
+                {{ form.set_name(class="drop-down-search", id="", style="width:400px") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary", id="") }}
+            </div>
+            {{ form.csrf_token() }}
+        </form>
+
+        <table class="table table-hover table-bordered table-striped">
+            <tr>
+                <th>
+                    <h2>Collection Owner: {{user.upper()}}</h2>
+                </th>
+            </tr>
+        </table>
+
+
+        <table class="table table-hover table-bordered table-striped">
+            <tr>
+                <th>
+                    <h2>{{ set_name }}</h2>
+                </th>
+            </tr>
+        </table>
+
+        <table class="table table-hover table-bordered table-striped">
+            <tr>
+                <th colspan="2">Mythic Rare</th>
+                <th colspan="2">Rare</th>
+                <th colspan="2">Uncommon</th>
+                <th colspan="2">Common</th>
+            </tr>
+            <tr>
+                <td colspan="1">Qty Reg: {{ mythic_rare_card_quantities[0] }}</td>
+                <td colspan="1">Qty Foil: {{ mythic_rare_card_quantities[1] }}</td>
+                <td colspan="1">Qty Reg: {{ rare_card_quantities[0] }}</td>
+                <td colspan="1">Qty Foil: {{ rare_card_quantities[1] }}</td>
+                <td colspan="1">Qty Reg: {{ uncommon_card_quantities[0] }}</td>
+                <td colspan="1">Qty Foil: {{ uncommon_card_quantities[1] }}</td>
+                <td colspan="1">Qty Reg: {{ common_card_quantities[0] }}</td>
+                <td colspan="1">Qty Foil: {{ common_card_quantities[1] }}</td>
+            </tr>
+            <tr>
+                <th colspan="2">Value</th>
+                <th colspan="2">Value</th>
+                <th colspan="2">Value</th>
+                <th colspan="2">Value</th>
+            </tr>
+            <tr>
+                <td colspan="1">Reg: {{ mythic_rare_values_list[0] }}</td>
+                <td colspan="1">Foil: {{ mythic_rare_values_list[1] }}</td>
+                <td colspan="1">Reg: {{ rare_values_list[0] }}</td>
+                <td colspan="1">Foil: {{ rare_values_list[1] }}</td>
+                <td colspan="1">Reg: {{ uncommon_values_list[0] }}</td>
+                <td colspan="1">Foil: {{ uncommon_values_list[1] }} </td>
+                <td colspan="1">Reg: {{ common_values_list[0] }}</td>
+                <td colspan="1">Foil: {{ common_values_list[1] }}</td>
+            </tr>
+        </table>
+
+        <table class="table table-hover table-bordered table-striped">
+            <tr>
+                <th>Total Reg. Cards</th>
+                <th>Total Reg. Value</th>
+                <th>Total Foil Cards</th>
+                <th>Total Foil Value</th>
+                <th>Total Cards</th>
+                <th>Total Value</th>
+            </tr>
+
+            <tr>
+                <td>{{ total_regular_cards }}</td>
+                <td>{{ total_regular_value }}</td>
+                <td>{{ total_foil_cards }}</td>
+                <td>{{ total_foil_value }}</td>
+                <td>{{ total_cards }}</td>
+                <td style="background-color: #e3ffe3;">{{ total_value }}</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class='container disclaimer'>
+        <p>Disclaimer: This product uses <a href="https://www.tcgplayer.com" target="_blank">TCGplayer</a> data but is
+            not endorsed or certified by TCGplayer.<br />
+            * This site is for informational purposes only. It's owners and/or authors make no guarantees or promises as
+            to the accuracy of listings and/or values presented.<br />
+            ** Value information is the "Market Price" retrieved from TCG Player. Values presented on this site are
+            updated manually and may not reflect the most current value available on TCG Player.</br>
+            *** Card Name links will direct you to TCG Player product page for that specific card. Once on their site,
+            you are bound by the terms and conditions of TCG Player.
+    </div>
+
+    <br />
+
+    {% if set_name != 'Full Collection Overview' %}
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by Card Name..">
+            </div>
+            <div class="col-md-6">
+                <input type="text" id="myInput2" onkeyup="myFunction2()"
+                    placeholder="Search By Rarity M, R, C, U, L, T, S, or P..">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover table-striped" id="myTable">
+                    <tr>
+                        <th>
+                            <div class="" id="expand-button">
+                                <button class="btn btn-primary btn-xs" onclick="expandAll()" type="button">Expand
+                                    All</button>
+                            </div>
+                            <div class="hide-button" id="close-button">
+                                <button class="btn btn-primary btn-xs" onclick="close_all()" type="button">Close
+                                    All</button>
+                            </div>
+                        </th>
+                        <th>Image</th>
+                        <th>Rarity</th>
+                        <th>Card Name</th>
+                        <th>Qty. Regular</th>
+                        <th>Value Reg. (Total)</th>
+                        <th>Qty. Foil</th>
+                        <th>Value Foil (Total)</th>
+                    </tr>
+                    {% for card in card_list_attributes %}
+                    <tr>
+                        <td><span class="glyphicon glyphicon-triangle-right" onclick="expandImage({{ card[4]}})"></span>
+                        </td>
+                        <td>
+                            <div class="card-image card-image-hidden" id="{{ card[4] }}">
+                                <img src="{{ card[2] }}" />
+                            </div>
+                        </td>
+                        <td>{{ card[0] }}</td>
+                        <td><a href="{{ card [3] }}" target="_blank">{{ card[1] }}</a></td>
+                        <td>{{ card[6] }}</td>
+                        <td>{{ card[8] }}&nbsp;&nbsp;&nbsp; ({{ card[10] }})</td>
+                        <td>{{ card[7] }} </td>
+                        <td>{{ card[9] }}&nbsp;&nbsp;&nbsp; ({{ card[11] }})</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        {% else %}
+
+        {% endif %}
+
+        <br />
+        <br />
+    </div>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('.drop-down-search').select2()
+        });
+
+        $(document).ready(function () {
+            $('.drop-down-search').select2()
+        });
+
+        function expandImage(productId) {
+            var imageId = document.getElementById(productId);
+            imageId.classList.toggle('card-image-hidden')
+        }
+
+        function expandAll() {
+            var images = document.querySelectorAll('.card-image');
+            console.log(images)
+            for (var i = 0; i < images.length; i++) {
+                images[i].classList.toggle('card-image-hidden');
+            }
+            document.getElementById('expand-button').classList.toggle('hide-button');
+            document.getElementById('close-button').classList.toggle('hide-button');
+        }
+
+        function close_all() {
+            var images = document.querySelectorAll('.card-image');
+            console.log(images)
+            for (var i = 0; i < images.length; i++) {
+                images[i].classList.toggle('card-image-hidden');
+            }
+            document.getElementById('expand-button').classList.toggle('hide-button');
+            document.getElementById('close-button').classList.toggle('hide-button');
+        }
+
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[3];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function myFunction2() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput2");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[2];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+
+    </script>
+
+    {% endblock %}

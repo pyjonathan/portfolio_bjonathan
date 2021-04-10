@@ -1,0 +1,225 @@
+{% extends "mtg_base.html" %}
+{% block programs_title_bar %}MTG | Main{% endblock %}
+{% block content %}
+
+<!-- FLASHED MESSASSGES -->
+<div class="container"> 
+    {% with messages = get_flashed_messages(category_filter=["successful_set_database_update"]) %}
+    {% if messages %}
+    <div class="alert alert-success alert-dismissible" role="alert">
+        {% for msg in messages %}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        {{ msg }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% with messages = get_flashed_messages(category_filter=["rarity_choice"]) %}
+    {% if messages %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        {% for msg in messages %}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        {{ msg }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+<!-- END FLASHED MESSAGES -->
+
+<!-- USER ADD FORM -->
+<div class="container choices">
+    <h2>Add Cards To Collection</h2>
+    <form class="form-inline" action="" method="POST">
+        <div class="form-group">
+            <label for="add-cards">Choose a set: </label>
+        </div>
+        <div class="form-group">
+            {{ form_user_add.set_name(class="drop-down-search") }}
+        </div>
+        <div class="form-group">
+            {{ form_user_add.submit_add(class="btn btn-primary") }}
+        </div>
+        <div class="form-group">
+            <a href="{{url_for('mtg.update_mtg_sets')}}" class="btn btn-warning fix-button" role="button">Update MTG Set List</button></a>
+        </div>
+        <br />
+        <br />
+        <div class="container">
+            <b>Choose Rarities to display:</b><br />
+        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                {{ form_user_add.mythic_rare()}}
+                                {{ form_user_add.mythic_rare.label() }}
+                            </div>
+                            <div class="col-sm-offset-2 col-sm-10">
+                                {{ form_user_add.rare()}}
+                                {{ form_user_add.rare.label }}
+                            </div>
+                            <div class="col-sm-offset-2 col-sm-10">
+                                {{ form_user_add.uncommon()}}
+                                {{ form_user_add.uncommon.label }}
+                            </div>
+                            <div class="col-sm-offset-2 col-sm-10">
+                                {{ form_user_add.common()}}
+                                {{ form_user_add.common.label }}
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-md-6">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            {{ form_user_add.land()}}
+                            {{ form_user_add.land.label }}
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            {{ form_user_add.token()}}
+                            {{ form_user_add.token.label }}
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            {{ form_user_add.special()}}
+                            {{ form_user_add.special.label }}
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            {{ form_user_add.promo()}}
+                            {{ form_user_add.promo.label }}
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+            {{ form_user_add.csrf_token() }}
+            </form>
+            </div>
+            </div>
+            </div>
+<!-- END USER ADD FORM -->
+
+<br />
+<br />
+
+<!-- USER REMOVE FORM -->
+<div class="container choices">
+    <h2>Remove Cards From Collection</h2>
+    <form class="form-inline" action="" method="POST">
+        <div class="form-group">
+            <label for="remove-cards">Choose a set: </label>
+        </div>
+        <div class="form-group">
+            {{ form_user_remove.set_name(class="drop-down-search", id="set-name-remove") }}
+        </div>
+        <div class="form-group">
+            {{ form_user_remove.submit_remove(class="btn btn-primary", id="submit-remove") }}
+        </div>
+        <br />
+        <br />
+        <div class="container">
+            <b>Choose Rarities to display:</b><br />
+        </div>
+        <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+            <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">                
+                 {{ form_user_remove.mythic_rare_remove()}} 
+                 {{ form_user_remove.mythic_rare_remove.label() }} 
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                {{ form_user_remove.rare_remove()}}
+                {{ form_user_remove.rare_remove.label }}
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                {{ form_user_remove.uncommon_remove()}}
+                {{ form_user_remove.uncommon_remove.label }}
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                {{ form_user_remove.common_remove()}}
+                {{ form_user_remove.common_remove.label }}
+            </div>
+            </div>
+            </div>
+
+            <div class="col-md-6">
+            <div class="col-sm-offset-2 col-sm-10">
+                {{ form_user_remove.land_remove()}}
+                {{ form_user_remove.land_remove.label }}
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                {{ form_user_remove.token_remove()}}
+                {{ form_user_remove.token_remove.label }}
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                {{ form_user_remove.special_remove()}}
+                {{ form_user_remove.special_remove.label }}
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                {{ form_user_remove.promo_remove()}}
+                {{ form_user_remove.promo_remove.label }}
+            </div>
+            </div>
+            </div>
+
+        </div>
+        {{ form_user_remove.csrf_token() }}
+    </form>
+    </div>
+</div>
+</div>
+
+
+<br />
+<br />
+
+<div class="container">
+    <div class="container">
+        {% if update_card_values == True %}
+        <button class="btn btn-primary update-button" onclick="location.href='{{ url_for('mtg.full_card_value_update') }}'" type="button" disabled>Update All Card Values</button>
+    </div>
+    <div class="container">
+            <small id="" class="form-text text-muted helper" style="float: right;">
+                * A full update can only be done every 48 hours. This button will be
+        <br />disabled if the time requirements are not met.
+        <br />** Feature disabled in demo version.</small>
+    </div>
+</div>
+
+        {% else %}
+<div class="container">
+    <div class="container">
+        <button class="btn btn-primary update-button" onclick="location.href='{{ url_for('mtg.full_card_value_update') }}'" type="button" disabled>Update All Card Values</button>
+    </div>
+    <div class="container">
+        <small id="" class="form-text text-muted helper" style="float: right;">
+            * A full update can only be done every 48 hours. This button will be 
+        <br /> disabled if the time requirements are not met.
+        <br />** Feature disabled in demo version.</small>
+    </div>
+</div>
+        {% endif %}
+<!-- ENDUSER REMOVE FORM -->
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<script>
+    $(document).ready(function () {
+        $('.drop-down-search').select2()
+    });
+
+    $(document).ready(function () {
+        $('.drop-down-search').select2()
+    });
+</script>
+
+{% endblock %}
